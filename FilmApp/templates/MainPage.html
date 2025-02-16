@@ -1,0 +1,68 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cinemania - Онлайн кинотеатр</title>
+    <link href="{% static 'css/style.css' %}" rel="stylesheet">
+</head>
+<body>
+    <header class="header">
+        <div class="logo">CINEMANIA</div>
+        <nav class="nav-links">
+            <a href="{% url 'main_page' %}">Главная</a>
+            <a href="{% url 'AllFilms_page' %}">Фильмы</a>
+            <a href="{% url 'all-serials' %}">Сериалы</a>
+                </nav>
+        <div class="search-box">
+            <input type="text" class="search-input" placeholder="Поиск фильмов...">
+            <button class="search-button">Найти</button>
+        </div>
+    </header>
+    
+    <main class="main-content">
+        <section class="movies-section">
+            <h2 class="section-title">Сейчас в тренде</h2>
+            <div class="movies-grid">
+                {% for F in films %}
+                <a href="{% url 'movie-detail' pk=F.pk %}">
+                    <div class="movie-card">
+                    <img src="{{ F.image_url }}" alt="{{ F.name }}" class="movie-poster">
+                    <div class="movie-info">
+                        <h3 class="movie-title">{{ F.name }}</h3>
+                        <span class="movie-year">{{ F.year }} • {{ F.genre }}</span>
+                        <div class="rating">★ {{ F.rating }}/10</div>
+                    </div>
+                </div></a>
+                {% endfor %}
+            </div>
+        </section>
+        <section class="movies-section">
+            <h2 class="section-title">Новинки</h2>
+            <div class="movies-grid">
+                {% for new_film in new_films %}
+                <a href="{% url 'movie-detail' pk=new_film.pk %}">
+                    <div class="movie-card">
+                    <img src="{{ new_film.image_url }}" alt="{{ new_film.name }}" class="movie-poster">
+                    <div class="movie-info">
+                        <h3 class="movie-title">{{ new_film.name }}</h3>
+                        <span class="movie-year">{{ new_film.year }} • {{ new_film.genre }}</span>
+                        <div class="rating">★ {{ new_film.rating }}/10</div>
+                    </div>
+                </div></a>
+                {% endfor %}
+            </div>
+        </section>
+    </main>
+    
+    <footer>
+        <p>© 2024 Cinemania. Все права защищены.</p>
+        <div class="social-links">
+            <a href="#">Facebook</a>
+            <a href="#">Twitter</a>
+            <a href="#">Instagram</a>
+        </div>
+    </footer>
+</body>
+</html>

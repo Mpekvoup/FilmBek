@@ -1,0 +1,141 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cinemania - Все фильмы</title>
+    <link href="{% static 'css/style.css' %}" rel="stylesheet">
+</head>
+<body>
+    <header class="header">
+        <div class="logo">CINEMANIA</div>
+        <nav class="nav-links">
+            <a href="{% url 'main_page' %}">Главная</a>
+            <a href="{% url 'AllFilms_page' %}">Фильмы</a>
+            <a href="#">Сериалы</a>
+        </nav>
+        <div class="search-box">
+            <input type="text" class="search-input" placeholder="Поиск фильмов...">
+            <button class="search-button">Найти</button>
+        </div>
+    </header>
+
+    <main class="main-content">
+      <nav class="filter-links">
+        <div class="filter-item">
+          <div class="filter-header" onclick="toggleSubfilters(this)">
+            <label for="genre">Жанр:</label>
+            <span class="toggle-icon">&#9660;</span>
+          </div>
+          <div class="subfilters" id="genre">
+            <a href="#" data-value="all">Все жанры</a>
+            <a href="#" data-value="action">Боевик</a>
+            <a href="#" data-value="comedy">Комедия</a>
+            <a href="#" data-value="drama">Драма</a>
+            <a href="#" data-value="fantasy">Фэнтези</a>
+            <a href="#" data-value="horror">Ужасы</a>
+            <a href="#" data-value="sci-fi">Фантастика</a>
+          </div>
+        </div>
+        
+        <div class="filter-item">
+          <div class="filter-header" onclick="toggleSubfilters(this)">
+            <label for="year">Год выпуска:</label>
+            <span class="toggle-icon">&#9660;</span>
+          </div>
+          <div class="subfilters" id="year">
+            <a href="#" data-value="all">Все годы</a>
+            <a href="#" data-value="before-1990">До 1990</a>
+            <a href="#" data-value="1990-2000">1990-2000</a>
+            <a href="#" data-value="2000-2010">2000-2010</a>
+            <a href="#" data-value="2010-2020">2010-2020</a>
+            <a href="#" data-value="2020-2025">2020-2025</a>
+          </div>
+        </div>
+                <div class="filter-item">
+          <div class="filter-header" onclick="toggleSubfilters(this)">
+            <label for="country">Страна:</label>
+            <span class="toggle-icon">&#9660;</span>
+          </div>
+          <div class="subfilters" id="country">
+            <a href="#" data-value="all">Все страны</a>
+            <a href="#" data-value="usa">США</a>
+            <a href="#" data-value="uk">Великобритания</a>
+            <a href="#" data-value="russia">Россия</a>
+            <a href="#" data-value="japan">Япония</a>
+          </div>
+        </div>
+                <div class="filter-item">
+          <div class="filter-header" onclick="toggleSubfilters(this)">
+            <label for="content-type">Тип контента:</label>
+            <span class="toggle-icon">&#9660;</span>
+          </div>
+          <div class="subfilters" id="content-type">
+            <a href="#" data-value="all">Все типы</a>
+            <a href="#" data-value="movie">Фильмы</a>
+            <a href="#" data-value="series">Сериалы</a>
+            <a href="#" data-value="anime">Аниме</a>
+            <a href="#" data-value="documentary">Документальные</a>
+          </div>
+        </div>
+                <div class="filter-item">
+          <div class="filter-header" onclick="toggleSubfilters(this)">
+            <label for="imdb-rating">Рейтинг IMDb:</label>
+            <span class="toggle-icon">&#9660;</span>
+          </div>
+          <div class="subfilters" id="imdb-rating">
+            <a href="#" data-value="all">Все рейтинги</a>
+            <a href="#" data-value="9-10">9-10</a>
+            <a href="#" data-value="8-9">8-9</a>
+            <a href="#" data-value="7-8">7-8</a>
+            <a href="#" data-value="6-7">6-7</a>
+            <a href="#" data-value="5-6">5-6</a>
+            <a href="#" data-value="below-5">Ниже 5</a>
+          </div>
+        </div>
+                <div class="filter-item">
+          <div class="filter-header" onclick="toggleSubfilters(this)">
+            <label for="age-rating">Возрастной рейтинг:</label>
+            <span class="toggle-icon">&#9660;</span>
+          </div>
+          <div class="subfilters" id="age-rating">
+            <a href="#" data-value="all">Все</a>
+            <a href="#" data-value="0+">0+</a>
+            <a href="#" data-value="6+">6+</a>
+            <a href="#" data-value="12+">12+</a>
+            <a href="#" data-value="16+">16+</a>
+            <a href="#" data-value="18+">18+</a>
+          </div>
+        </div>
+      </nav>
+        <section class="movies-section">
+            <h2 class="section-title">Все фильмы</h2>
+            <div class="movies-grid">
+                {% for F in films %}
+                <a href="{% url 'movie-detail' pk=F.pk %}">
+                    <div class="movie-card">
+                        <img src="{{ F.image_url }}" alt="{{ F.name }}" class="movie-poster">
+                        <div class="movie-info">
+                            <h3 class="movie-title">{{ F.name }}</h3>
+                            <span class="movie-year">{{ F.year }} • {{ F.genre }}</span>
+                            <div class="rating">★ {{ F.rating }}/10</div>
+                        </div>
+                    </div>
+                </a>
+                {% endfor %}
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>© 2024 Cinemania. Все права защищены.</p>
+        <div class="social-links">
+            <a href="#">Facebook</a>
+            <a href="#">Twitter</a>
+            <a href="#">Instagram</a>
+        </div>
+    </footer>
+    <script src="{% static './js/js.js' %}"></script>
+</body>
+</html>
