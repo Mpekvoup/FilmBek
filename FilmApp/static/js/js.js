@@ -28,11 +28,16 @@ searchInput.addEventListener("input", function () {
     }
 
     fetch(`/search-suggestions/?q=${encodeURIComponent(query)}`)
-      .then((response) => response.json())
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json();
+      })
       .then((data) => {
         suggestionsContainer.innerHTML = "";
 
-        if (data.suggestions.length > 0) {
+        if (data.suggestions && data.suggestions.length > 0) {
           suggestionsContainer.style.display = "block";
 
           data.suggestions.forEach((item) => {
@@ -73,6 +78,7 @@ searchInput.addEventListener("input", function () {
       })
       .catch((error) => {
         console.error("Ошибка при получении подсказок:", error);
+        suggestionsContainer.style.display = "none";
       });
   }, 300);
 });
