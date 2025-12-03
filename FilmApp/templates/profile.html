@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+  Профиль пользователя
+{% endblock %}
+
+{% block extra_css %}
+  <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+{% endblock %}
+
+{% block content %}
+  <div class="profile-container">
+    <div class="profile-header">
+      <div class="profile-avatar">
+        {% if user.profile.avatar %}
+          <img src="{{ user.profile.avatar.url }}" alt="Аватар пользователя" />
+        {% else %}
+          <img src="{% static './img/default-avatar.jpg' %}" alt="Аватар по умолчанию" />
+        {% endif %}
+      </div>
+      <div class="profile-info">
+        <h1>{{ user.get_full_name }}</h1>
+        <p class="email">{{ user.email }}</p>
+        <p class="phone">{{ user.profile.phone_number }}</p>
+      </div>
+    </div>
+
+    <div class="favorite-movies">
+      <h2>Любимые фильмы</h2>
+      <div class="movies-grid">
+        {% for film in random_films %}
+          <a href="{% url 'movie-detail' pk=film.pk %}" class="movie-card">
+            <img src="{{ film.image_url }}" alt="{{ film.name }}" loading="lazy" />
+            <div class="movie-card-content">
+              <div class="movie-title">{{ film.name }}</div>
+              <div class="movie-year">{{ film.year }}</div>
+              <div class="movie-genres">
+                {% for genre in film.genres.all %}
+                  {{ genre.name }}{% if not forloop.last %}, {% endif %}
+                  
+                {% endfor %}
+              </div>
+              <div class="rating">★ {{ film.rating.value|default:'0' }}/10</div>
+            </div>
+          </a>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block extra_js %}
+  <script src="{% static 'js/profile.js' %}"></script>
+{% endblock %}

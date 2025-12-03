@@ -1,68 +1,74 @@
+{% extends 'base.html' %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cinemania - Онлайн кинотеатр</title>
-    <link href="{% static 'css/style.css' %}" rel="stylesheet">
-</head>
-<body>
-    <header class="header">
-        <div class="logo">CINEMANIA</div>
-        <nav class="nav-links">
-            <a href="{% url 'main_page' %}">Главная</a>
-            <a href="{% url 'AllFilms_page' %}">Фильмы</a>
-            <a href="{% url 'all-serials' %}">Сериалы</a>
-                </nav>
-        <div class="search-box">
-            <input type="text" class="search-input" placeholder="Поиск фильмов...">
-            <button class="search-button">Найти</button>
-        </div>
-    </header>
-    
-    <main class="main-content">
-        <section class="movies-section">
-            <h2 class="section-title">Сейчас в тренде</h2>
-            <div class="movies-grid">
-                {% for F in films %}
-                <a href="{% url 'movie-detail' pk=F.pk %}">
-                    <div class="movie-card">
-                    <img src="{{ F.image_url }}" alt="{{ F.name }}" class="movie-poster">
-                    <div class="movie-info">
-                        <h3 class="movie-title">{{ F.name }}</h3>
-                        <span class="movie-year">{{ F.year }} • {{ F.genre }}</span>
-                        <div class="rating">★ {{ F.rating }}/10</div>
-                    </div>
-                </div></a>
-                {% endfor %}
+
+{% block title %}
+  Cinemania - Онлайн кинотеатр
+{% endblock %}
+
+{% block content %}
+  <section class="movies-section" aria-labelledby="trending-title">
+    <h2 id="trending-title" class="section-title">Сейчас в тренде</h2>
+    <div class="slider" aria-label="Слайдер популярных фильмов">
+      <div class="list">
+        {% for film in films %}
+          <a href="{% url 'movie-detail' pk=film.pk %}" class="movie-link" aria-label="Перейти к просмотру {{ film.name }}">
+            <div class="movie-card">
+              <img src="{{ film.image_url }}" alt="{{ film.name }}" class="movie-poster" loading="lazy" />
+              <div class="movie-info">
+                <h3 class="movie-title">{{ film.name }}</h3>
+                <span class="movie-year">
+                  {{ film.year }} •{% for genre in film.genres.all %}
+                    {{ genre.name }}{% if not forloop.last %}, {% endif %}
+                  {% empty %}
+                    Нет жанров
+                  {% endfor %}
+                </span>
+                <div class="rating" aria-label="Рейтинг фильма">★ {{ film.rating }}/10</div>
+              </div>
             </div>
-        </section>
-        <section class="movies-section">
-            <h2 class="section-title">Новинки</h2>
-            <div class="movies-grid">
-                {% for new_film in new_films %}
-                <a href="{% url 'movie-detail' pk=new_film.pk %}">
-                    <div class="movie-card">
-                    <img src="{{ new_film.image_url }}" alt="{{ new_film.name }}" class="movie-poster">
-                    <div class="movie-info">
-                        <h3 class="movie-title">{{ new_film.name }}</h3>
-                        <span class="movie-year">{{ new_film.year }} • {{ new_film.genre }}</span>
-                        <div class="rating">★ {{ new_film.rating }}/10</div>
-                    </div>
-                </div></a>
-                {% endfor %}
-            </div>
-        </section>
-    </main>
-    
-    <footer>
-        <p>© 2024 Cinemania. Все права защищены.</p>
-        <div class="social-links">
-            <a href="#">Facebook</a>
-            <a href="#">Twitter</a>
-            <a href="#">Instagram</a>
+          </a>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+  <section class="hero-section">
+    <h1 class="New-premier">Новая Премьера</h1>
+    <div class="hero-banner">
+      <video autoplay loop muted playsinline class="hero-image">
+        <source src="{% static 'videos/fan-four.mp4' %}" type="video/mp4" />Ваш браузер не поддерживает видео.
+      </video>
+      <div class="hero-content">
+        <div class="banner-movie-title">
+          <h1 class="hero-title">Фантастическая четвёрка</h1>
         </div>
-    </footer>
-</body>
-</html>
+        <div class="banner-movie-desc">
+          <p class="hero-description">
+            Четыре учёных, получивших суперспособности в результате космической аномалии, 
+            объединяются, чтобы спасти мир от разрушения.
+          </p>
+        </div>
+        <a href="#" class="hero-button">Смотреть сейчас</a>
+      </div>
+    </div>
+  </section>
+  <h2 class="section-title-news">Новости кино</h2>
+  <section class="news-section">
+    <div class="news-container">
+      {% for item in news_list %}
+        <a href="{% url 'news_detail' pk=item.pk %}">
+          <article class="news-item">
+            <img src="{{ item.image_url }}" alt="{{ item.title }}" class="news-image" />
+            <div class="news-content">
+              <h3 class="news-title"><a href="{% url 'news_detail' pk=item.pk %}">{{ item.title }}</a></h3>
+              <p class="news-date">{{ item.published_date|date:'d M Y' }}</p>
+              <p class="news-excerpt">{{ item.content|truncatewords:20 }}</p>
+            </div>
+          </article>
+        </a>
+      {% empty %}
+        <p>Новостей пока нет.</p>
+      {% endfor %}
+    </div>
+    <a href="{% url 'news-list' %}" class="news-more">Все новости</a>
+  </section>
+{% endblock %}

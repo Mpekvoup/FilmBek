@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}
+  Настройки — CINEMANIA
+{% endblock %}
+
+{% block content %}
+<section class="main-content settings-page">
+  <h2 class="settings-page__heading">Настройки</h2>
+  <div class="user-greeting">
+    Привет, <strong>{% if user.is_authenticated %}{{ user.get_full_name|default:'Anonym' }}{% else %}Anonym{% endif %}</strong>!
+  </div>
+
+  <div class="settings-section">
+    <h3 class="settings-section__title">Профиль</h3>
+    <div class="form-group">
+      <label for="username">Имя пользователя</label>
+      <input type="text" id="username" name="username"
+             class="form-control"
+             value="{% if user.is_authenticated %}{{ user.get_full_name|default:'Anonym' }}{% else %}Anonym{% endif %}"  />
+    </div>
+    <div class="form-group">
+      <label for="email">Электронная почта</label>
+      <input type="email" id="email" name="email"
+             class="form-control"
+             value="{{ user.email }}" />
+    </div>
+  </div>
+
+
+    <!-- Секция 2: Интерфейс -->
+    <div class="settings-section">
+      <h3 class="settings-section__title">Интерфейс</h3>
+      <div class="form-group">
+        <label for="language">Язык интерфейса</label>
+        <select id="language" name="language" class="form-control">
+          <option value="ru" >Русский</option>
+          <option value="en">English</option>
+        </select>
+      </div>
+
+    <!-- Секция 3: Уведомления -->
+    <div class="settings-section">
+      <h3 class="settings-section__title">Уведомления</h3>
+      <div class="form-group-checkbox">
+        <input type="checkbox" id="notify_new" name="notify_new"
+             />
+        <label for="notify_new">Сообщать о новых фильмах и сериалах</label>
+      </div>
+      <div class="form-group-checkbox">
+        <input type="checkbox" id="notify_recommend" name="notify_recommend"/>
+        <label for="notify_recommend">Рекомендации по вашим интересам</label>
+      </div>
+    </div>
+
+    <!-- Секция 4: Воспроизведение -->
+    <div class="settings-section">
+      <h3 class="settings-section__title">Качество воспроизведения</h3>
+      <div class="form-group">
+        <label for="quality">Предпочтительное качество</label>
+        <select id="quality" name="quality" class="form-control">
+          <option value="auto">Авто</option>
+          <option value="720p" >HD (720p)</option>
+          <option value="1080p" >Full HD (1080p)</option>
+          <option value="4k" >4K Ultra HD</option>
+        </select>
+      </div>
+      <div class="form-group-checkbox">
+        <input type="checkbox" id="autoplay_next" name="autoplay_next"
+        <label for="autoplay_next">Авто-запуск следующего эпизода</label>
+      </div>
+    </div>
+
+    <!-- Кнопка сохранения -->
+    <div class="form-actions">
+      <button type="submit" class="btn btn-primary">Сохранить изменения</button>
+    </div>
+  </form>
+</section>
+{% endblock %}

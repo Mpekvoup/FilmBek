@@ -1,0 +1,137 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>
+    {% block title %}
+    Cinemania
+    {% endblock %}
+  </title>
+  <link href="{% static 'css/style.css' %}" rel="stylesheet" />
+  <link rel="stylesheet" href="https://unicons.iconscout.com/release/v2.1.9/css/unicons.css" />
+  {% block extra_css %}{% endblock %}
+</head>
+
+<body>
+  <div class="sidebar" id="sidebar">
+    <div class="sidebar-content">
+      <div class="sidebar-header">
+        <button class="close-sidebar" onclick="toggleSidebar()">×</button>
+      </div>
+      <nav class="sidebar-nav">
+        {% if user.is_authenticated %}
+        <a href="{% url 'profile' %}" class="sidebar-link">
+          <i class="uil uil-user"></i>
+          Мой профиль
+        </a>
+        {% else %}
+        <a href="{% url 'login_page' %}" class="sidebar-link">
+          <i class="uil uil-user"></i>
+          Регистрация/Вход
+        </a>
+        {% endif %}
+        <a href="{% url 'AllFilms_page' %}" class="sidebar-link">
+          <i class="uil uil-film"></i>
+          Фильтр фильмов
+        </a>
+        <a href="{% url 'settings' %}" class="sidebar-link">
+          <i class="uil uil-setting"></i>
+          Настройки
+        </a>
+        <a href="{% url 'AllSerials_page' %}" class="sidebar-link">
+          <img class="series_svg" src="{% static 'img/series.svg' %}"class="uil uil-serials">
+          Сериалы
+        </a>
+        <span class="line"></span> 
+
+        {% if user.is_authenticated %}
+        <a href="{% url 'watchlist' %}" class="sidebar-link">
+          <img class="series_svg" src="{% static 'img/watchlist.svg' %}"class="uil uil-serials">
+          Список фильмов/Сериалов к просмотру
+        </a>
+        {% else %}
+        <a href="{% url 'warning' %}" class="sidebar-link">
+          <img class="series_svg" src="{% static 'img/watchlist.svg' %}"class="uil uil-serials">
+          Список фильмов/Сериалов к просмотру
+        </a>
+        {% endif %}
+
+        {% if user.is_authenticated %}
+        <a href="{% url 'AllSerials_page' %}" class="sidebar-link">
+          <img class="series_svg" src="{% static 'img/history.svg' %}"class="uil uil-serials">
+          История просмотра
+        </a>
+
+        {% else %}
+        <a href="{% url 'warning' %}" class="sidebar-link">
+          <img class="series_svg" src="{% static 'img/history.svg' %}"class="uil uil-serials">
+          История просмотра
+        </a>
+        </a>
+        {% endif %}
+        <a href="{% url 'bout' %}" class="sidebar-link">
+          <img class="series_svg" src="{% static 'img/heart.svg' %}"class="uil uil-serials">
+          Обо мне
+        </a>
+        {% if user.is_authenticated %}
+
+        <a href="{% url 'logout' %}" class="sidebar-link">
+          <img class="series_svg" src="{% static 'img/exit.svg' %}"class="uil uil-serials">
+          Выйти
+        </a>
+
+        {% endif %}
+      </nav>
+    </div>
+  </div>
+  <header class="header" role="banner">
+    <a  class="main_link"href="{% url 'main_page' %}"> <div class="logo">CINEMANIA</div> <a>
+    <nav class="nav-links" role="navigation">
+      <a href="{% url 'main_page' %}">Главная</a>
+      <a href="{% url 'AllFilms_page' %}">Фильмы</a>
+      <a href="{% url 'AllSerials_page' %}">Сериалы</a>
+      {% if user.is_authenticated %}
+      <a href="{% url 'profile' %}" class="profile-link">
+        Профиль
+      </a>
+      {% endif %}
+    </nav>
+    <form method="get" action="{% url 'search' %}" class="search-box">
+      <div class="search-wrapper">
+        <input
+        type="text"
+        name="q"
+        placeholder="Поиск..."
+        class="search-input"
+        {% if query|cut:" " %}
+          value="{{ query }}"
+        {% endif %}
+        aria-label="Поле поиска"
+      />
+          <button type="submit" class="search-button">
+              <img src="{% static 'img/loupe.svg' %}" alt="Поиск" width="20" height="20" />
+          </button>
+          <div class="suggestions"></div>
+      </div>
+  </form>
+    <button class="menu-toggle" onclick="toggleSidebar()" aria-label="Меню">
+      <img src="{% static 'img/menu.svg' %}" class="menu-toggle" width="25" height="25"  >
+    </button>
+  </header>
+  <main class="main-content">
+    {% block content %}
+    {% endblock %}
+  </main>
+  <footer class="footer">
+    <div class="footer-content">
+      <p>&copy; 2024 Cinemania. Все права защищены.</p>
+    </div>
+  </footer>
+  <script src="{% static 'js/js.js' %}"></script>
+  {% block extra_js %}{% endblock %}
+</body>
+
+</html>

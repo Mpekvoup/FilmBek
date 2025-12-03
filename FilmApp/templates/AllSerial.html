@@ -1,140 +1,124 @@
-{% load static %}
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cinemania - Все Сериалы</title>
-    <link href="{% static 'css/style.css' %}" rel="stylesheet">
-</head>
-<body>
-    <header class="header">
-        <div class="logo">CINEMANIA</div>
-        <nav class="nav-links">
-            <a href="{% url 'main_page' %}">Главная</a>
-            <a href="{% url 'AllFilms_page' %}">Фильмы</a>
-            <a href="#">Сериалы-Вы тут</a>
-        </nav>
-        <div class="search-box">
-            <input type="text" class="search-input" placeholder="Поиск сериалов...">
-            <button class="search-button">Найти</button>
+{% extends 'base.html' %}
+{% block title %}
+  Cinemania - Все Сериалы
+{% endblock %}
+{% block content %}
+  {% load static %}
+  <main class="main-content">
+    <nav class="filter-links" aria-label="Фильтры для поиска сериалов">
+      <div class="filter-item">
+        <div class="filter-header">
+          <label for="genre">Жанр:</label>
+          <button type="button" onclick="toggleSubfilters(this)" class="toggle-icon">&#9660;</button>
         </div>
-    </header>
-    <main class="main-content">
-      <nav class="filter-links">
-        <div class="filter-item">
-          <div class="filter-header" onclick="toggleSubfilters(this)">
-            <label for="genre">Жанр:</label>
-            <span class="toggle-icon">&#9660;</span>
-          </div>
-          <div class="subfilters" id="genre">
-            <a href="#" data-value="all">Все жанры</a>
-            <a href="#" data-value="action">Боевик</a>
-            <a href="#" data-value="comedy">Комедия</a>
-            <a href="#" data-value="drama">Драма</a>
-            <a href="#" data-value="fantasy">Фэнтези</a>
-            <a href="#" data-value="horror">Ужасы</a>
-            <a href="#" data-value="sci-fi">Фантастика</a>
-          </div>
+        <div class="subfilters" id="genre">
+          <a href="{% url 'filtered_serials' 'genre' 'all' %}">Все жанры</a>
+          <a href="{% url 'filtered_serials' 'genre' 'boevik' %}">Боевик</a>
+          <a href="{% url 'filtered_serials' 'genre' 'komediya' %}">Комедия</a>
+          <a href="{% url 'filtered_serials' 'genre' 'drama' %}">Драма</a>
+          <a href="{% url 'filtered_serials' 'genre' 'fentezi' %}">Фэнтези</a>
+          <a href="{% url 'filtered_serials' 'genre' 'horror' %}">Ужасы</a>
+          <a href="{% url 'filtered_serials' 'genre' 'fantastika' %}">Фантастика</a>
+          <a href="{% url 'filtered_serials' 'genre' 'nauchnaya-fantastika' %}">Научная Фантастика</a>
+          <a href="{% url 'filtered_serials' 'genre' 'triller' %}">Триллер</a>
+          <a href="{% url 'filtered_serials' 'genre' 'kriminal' %}">Криминал</a>
+          <a href="{% url 'filtered_serials' 'genre' 'detektiv' %}">Детектив</a>
         </div>
-        
-        <div class="filter-item">
-          <div class="filter-header" onclick="toggleSubfilters(this)">
-            <label for="year">Год выпуска:</label>
-            <span class="toggle-icon">&#9660;</span>
-          </div>
-          <div class="subfilters" id="year">
-            <a href="#" data-value="all">Все годы</a>
-            <a href="#" data-value="before-1990">До 1990</a>
-            <a href="#" data-value="1990-2000">1990-2000</a>
-            <a href="#" data-value="2000-2010">2000-2010</a>
-            <a href="#" data-value="2010-2020">2010-2020</a>
-            <a href="#" data-value="2020-2025">2020-2025</a>
-          </div>
+      </div>
+      <div class="filter-item">
+        <div class="filter-header">
+          <label for="year">Год выпуска:</label>
+          <button type="button" onclick="toggleSubfilters(this)" aria-controls="year" class="toggle-icon">&#9660;</button>
         </div>
-                <div class="filter-item">
-          <div class="filter-header" onclick="toggleSubfilters(this)">
-            <label for="country">Страна:</label>
-            <span class="toggle-icon">&#9660;</span>
-          </div>
-          <div class="subfilters" id="country">
-            <a href="#" data-value="all">Все страны</a>
-            <a href="#" data-value="usa">США</a>
-            <a href="#" data-value="uk">Великобритания</a>
-            <a href="#" data-value="russia">Россия</a>
-            <a href="#" data-value="japan">Япония</a>
-          </div>
+        <div class="subfilters" id="year">
+          <a href="{% url 'filtered_serials' 'year' 'all' %}">Все годы</a>
+          <a href="{% url 'filtered_serials' 'year' 'before-1990' %}">До 1990</a>
+          <a href="{% url 'filtered_serials' 'year' '1990-2000' %}">1990-2000</a>
+          <a href="{% url 'filtered_serials' 'year' '2000-2010' %}">2000-2010</a>
+          <a href="{% url 'filtered_serials' 'year' '2010-2020' %}">2010-2020</a>
+          <a href="{% url 'filtered_serials' 'year' '2020-2025' %}">2020-2025</a>
         </div>
-                <div class="filter-item">
-          <div class="filter-header" onclick="toggleSubfilters(this)">
-            <label for="content-type">Тип контента:</label>
-            <span class="toggle-icon">&#9660;</span>
-          </div>
-          <div class="subfilters" id="content-type">
-            <a href="#" data-value="all">Все типы</a>
-            <a href="#" data-value="movie">Фильмы</a>
-            <a href="#" data-value="series">Сериалы</a>
-            <a href="#" data-value="anime">Аниме</a>
-            <a href="#" data-value="documentary">Документальные</a>
-          </div>
+      </div>
+      <div class="filter-item">
+        <div class="filter-header">
+          <label for="country">Страна:</label>
+          <button type="button" onclick="toggleSubfilters(this)" aria-controls="country" class="toggle-icon">&#9660;</button>
         </div>
-                <div class="filter-item">
-          <div class="filter-header" onclick="toggleSubfilters(this)">
-            <label for="imdb-rating">Рейтинг IMDb:</label>
-            <span class="toggle-icon">&#9660;</span>
-          </div>
-          <div class="subfilters" id="imdb-rating">
-            <a href="#" data-value="all">Все рейтинги</a>
-            <a href="#" data-value="9-10">9-10</a>
-            <a href="#" data-value="8-9">8-9</a>
-            <a href="#" data-value="7-8">7-8</a>
-            <a href="#" data-value="6-7">6-7</a>
-            <a href="#" data-value="5-6">5-6</a>
-            <a href="#" data-value="below-5">Ниже 5</a>
-          </div>
+        <div class="subfilters" id="country">
+          <a href="{% url 'filtered_serials' 'country' 'all' %}">Все страны</a>
+          <a href="{% url 'filtered_serials' 'country' 'usa' %}">США</a>
+          <a href="{% url 'filtered_serials' 'country' 'uk' %}">Великобритания</a>
+          <a href="{% url 'filtered_serials' 'country' 'yuzhnaya-koreya' %}">Южная Корея</a>
+          <a href="{% url 'filtered_serials' 'country' 'japan' %}">Япония</a>
+          <a href="{% url 'filtered_serials' 'country' 'avstraliya' %}">Австралия</a>
         </div>
-                <div class="filter-item">
-          <div class="filter-header" onclick="toggleSubfilters(this)">
-            <label for="age-rating">Возрастной рейтинг:</label>
-            <span class="toggle-icon">&#9660;</span>
-          </div>
-          <div class="subfilters" id="age-rating">
-            <a href="#" data-value="all">Все</a>
-            <a href="#" data-value="0+">0+</a>
-            <a href="#" data-value="6+">6+</a>
-            <a href="#" data-value="12+">12+</a>
-            <a href="#" data-value="16+">16+</a>
-            <a href="#" data-value="18+">18+</a>
-          </div>
+      </div>
+      <div class="filter-item">
+        <div class="filter-header">
+          <label for="content-type">Тип контента:</label>
+          <button type="button" onclick="toggleSubfilters(this)" aria-controls="content-type" class="toggle-icon">&#9660;</button>
         </div>
-      </nav>
-      <section class="movies-section">
-        <h2 class="section-title">Все сериалы</h2>
-        <div class="movies-grid">
-            {% for S in serials %}
-            <a href="{% url 'serial-detail' pk=S.pk %}">
+        <div class="subfilters" id="content-type">
+          <a href="{% url 'filtered_serials' 'content-type' 'all' %}">Все типы</a>
+          <a href="{% url 'AllFilms_page' %}">Фильмы</a>
+          <a href="{% url 'AllSerials_page' %}">Сериалы</a>
+          <a href="{% url 'AllSerials_page' %}">Аниме</a>
+          <a href="{% url 'filtered_serials' 'content-type' 'documentary' %}">Документальные</a>
+        </div>
+      </div>
+      <div class="filter-item">
+        <div class="filter-header">
+          <label for="imdb-rating">Рейтинг IMDb:</label>
+          <button type="button" onclick="toggleSubfilters(this)" aria-controls="imdb-rating" class="toggle-icon">&#9660;</button>
+        </div>
+        <div class="subfilters" id="imdb-rating">
+          <a href="{% url 'filtered_serials' 'rating' 'all' %}">Все рейтинги</a>
+          <a href="{% url 'filtered_serials' 'rating' '9-10' %}">9-10</a>
+          <a href="{% url 'filtered_serials' 'rating' '8-9' %}">8-9</a>
+          <a href="{% url 'filtered_serials' 'rating' '7-8' %}">7-8</a>
+          <a href="{% url 'filtered_serials' 'rating' '6-7' %}">6-7</a>
+          <a href="{% url 'filtered_serials' 'rating' '5-6' %}">5-6</a>
+          <a href="{% url 'filtered_serials' 'rating' 'below-5' %}">Ниже 5</a>
+        </div>
+      </div>
+      <div class="filter-item">
+        <div class="filter-header">
+          <label for="age-rating">Возрастной рейтинг:</label>
+          <button type="button" onclick="toggleSubfilters(this)" aria-controls="age-rating" class="toggle-icon">&#9660;</button>
+        </div>
+        <div class="subfilters" id="age-rating">
+          <a href="{% url 'filtered_serials' 'age-rating' 'all' %}">Все</a>
+          <a href="{% url 'filtered_serials' 'age-rating' '0' %}">0+</a>
+          <a href="{% url 'filtered_serials' 'age-rating' '6' %}">6+</a>
+          <a href="{% url 'filtered_serials' 'age-rating' '12' %}">12+</a>
+          <a href="{% url 'filtered_serials' 'age-rating' '16' %}">16+</a>
+          <a href="{% url 'filtered_serials' 'age-rating' '18' %}">18+</a>
+        </div>
+      </div>
+    </nav>
+    <section class="movies-section" aria-label="Список сериалов">
+      <div class="slidere">
+        <div class="liste">
+          {% for serial in serials %}
+            <a href="{% url 'serial-detail' pk=serial.pk %}" class="movie-link" aria-label="Подробнее о сериале {{ serial.name }}">
               <div class="movie-card">
-                    <img src="{{ S.image_url }}" alt="{{ S.name }}" class="movie-poster">
-                    <div class="movie-info">
-                        <h3 class="movie-title">{{ S.name }}</h3>
-                        <span class="movie-year">{{ S.year }} • {{ S.genre }}</span>
-                        <div class="rating">★ {{ S.rating }}/10</div>
-                    </div>
+                <img src="{{ serial.image_url }}" alt="{{ serial.name }}" class="movie-poster" loading="lazy" />
+                <div class="movie-info">
+                  <h3 class="movie-title">{{ serial.name }}</h3>
+                  <span class="movie-year">
+                    {{ serial.year }} •{% for genre in serial.genres.all %}
+                      {{ genre.name }}{% if not forloop.last %}, {% endif %}
+                    {% empty %}
+                      Нет жанров
+                    {% endfor %}
+                  </span>
+                  <div class="rating" aria-label="Рейтинг сериала">★ {{ serial.rating }}/10</div>
                 </div>
+              </div>
             </a>
-            {% endfor %}
+          {% endfor %}
         </div>
+      </div>
     </section>
-    </main>
-
-    <footer>
-        <p>© 2024 Cinemania. Все права защищены.</p>
-        <div class="social-links">
-            <a href="#">Facebook</a>
-            <a href="#">Twitter</a>
-            <a href="#">Instagram</a>
-        </div>
-    </footer>
-    <script src="{% static './js/js.js' %}"></script>
-</body>
-</html>
+  </main>
+{% endblock %}

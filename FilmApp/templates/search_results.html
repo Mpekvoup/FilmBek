@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+  Результаты поиска
+{% endblock %}
+
+{% block content %}
+<main class="main-content">
+
+  {% if films %}
+    <section class="movies-section-mov" aria-label="Найденные фильмы">
+      <h2>Фильмы ({{ films.count }})</h2>
+      <div class="slidere">
+        <div class="liste">
+          {% for film in films %}
+            <a href="{% url 'movie-detail' pk=film.pk %}" class="movie-link" aria-label="Подробнее о фильме {{ film.name }}">
+              <div class="movie-card">
+                <img src="{{ film.image_url }}" alt="{{ film.name }}" class="movie-poster" loading="lazy" />
+                <div class="movie-info">
+                  <h3 class="movie-title">{{ film.name }}</h3>
+                  <span class="movie-year">
+                    {{ film.year }} •
+                    {% for genre in film.genres.all %}
+                      {{ genre.name }}{% if not forloop.last %}, {% endif %}
+                    {% endfor %}
+                  </span>
+                  <div class="rating" aria-label="Рейтинг фильма">★ {{ film.rating }}/10</div>
+                </div>
+              </div>
+            </a>
+          {% endfor %}
+        </div>
+      </div>
+    </section>
+  {% endif %}
+
+  {% if serials %}
+    <section class="movies-section-serial" aria-label="Найденные сериалы">
+      <h2>Сериалы ({{ serials.count }})</h2>
+      <div class="slidere">
+        <div class="liste">
+          {% for serial in serials %}
+            <a href="{% url 'serial-detail' pk=serial.pk %}" class="movie-link" aria-label="Подробнее о сериале {{ serial.name }}">
+              <div class="movie-card">
+                <img src="{{ serial.image_url }}" alt="{{ serial.name }}" class="movie-poster" loading="lazy" />
+                <div class="movie-info">
+                  <h3 class="movie-title">{{ serial.name }}</h3>
+                  <span class="movie-year">
+                    {{ serial.year }} •
+                    {% for genre in serial.genres.all %}
+                      {{ genre.name }}{% if not forloop.last %}, {% endif %}
+                    {% endfor %}
+                  </span>
+                  <div class="rating" aria-label="Рейтинг сериала">★ {{ serial.rating }}/10</div>
+                </div>
+              </div>
+            </a>
+          {% endfor %}
+        </div>
+      </div>
+    </section>
+  {% endif %}
+
+  {% if not films and not serials and query %}
+    <section class="no-results">
+      <h2>Ничего не найдено</h2>
+      <p>По запросу «{{ query }}» ничего не найдено.</p>
+      <p>Попробуйте изменить поисковый запрос или <a href="{% url 'main_page' %}">вернуться на главную</a>.</p>
+    </section>
+  {% endif %}
+</main>
+{% endblock %}

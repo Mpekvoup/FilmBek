@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block title %}Cinemania - {{ serial.name }}{% endblock %}
+{% block content %}
+<section class="movie-detail">
+  <div class="movie-detail-card">
+    <img src="{{ serial.image_url }}" alt="{{ serial.name }}" class="movie-detail-poster" loading="lazy">
+    <div class="movie-detail-info">
+      <h1 class="movie-detail-title">{{ serial.name }}</h1>
+      <span class="movie-detail-year">{{ serial.year }} •  {% for genre in serial.genres.all %}
+        {{ genre.name }}{% if not forloop.last %}, {% endif %}
+      {% empty %}
+        Нет жанров
+      {% endfor %}</span>
+      <div class="rating" aria-label="Рейтинг сериала">★ {{ serial.rating }}/10</div>
+      <p class="movie-description">{{ serial.description }}</p>
+      <button class="watch-button" aria-label="Смотреть {{ serial.name }}">Смотреть</button>
+    </div>
+  </div>
+</section>
+{% endblock %}

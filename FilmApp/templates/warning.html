@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <div class="warning-container">
+    <div class="warning-icon">⚠️</div>
+    <h1 class="warning-title">Требуется авторизация</h1>
+    <p class="warning-text">Для доступа к этой странице необходимо войти в свой аккаунт или зарегистрироваться.</p>
+    <a href="{% url 'login_page' %}" class="auth-button">Войти или зарегистрироваться</a>
+  </div>
+{% endblock %}

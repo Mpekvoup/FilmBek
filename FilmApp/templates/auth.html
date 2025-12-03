@@ -1,0 +1,210 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<link rel="stylesheet" href="https://unicons.iconscout.com/release/v2.1.9/css/unicons.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/css/bootstrap.min.css">
+	<title>{% block title %}Cinemania{% endblock %}</title>
+	<link rel="stylesheet" href="{% static 'css/styl.css' %}">
+	<link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+
+<body>
+	<div class="sidebar" id="sidebar">
+		<div class="sidebar-content">
+		  <div class="sidebar-header">
+			<button class="close-sidebar" onclick="toggleSidebar()">×</button>
+		  </div>
+		  <nav class="sidebar-nav">
+			{% if user.is_authenticated %}
+			<a href="{% url 'profile' %}" class="sidebar-link">
+			  <i class="uil uil-user"></i>
+			  Мой профиль
+			</a>
+			{% else %}
+			<a href="{% url 'login_page' %}" class="sidebar-link">
+			  <i class="uil uil-user"></i>
+			  Регистрация/Вход
+			</a>
+			{% endif %}
+			<a href="{% url 'AllFilms_page' %}" class="sidebar-link">
+			  <i class="uil uil-film"></i>
+			  Фильтр фильмов
+			</a>
+			<a href="{% url 'settings' %}" class="sidebar-link">
+			  <i class="uil uil-setting"></i>
+			  Настройки
+			</a>
+			<a href="{% url 'AllSerials_page' %}" class="sidebar-link">
+			  <img class="series_svg" src="{% static 'img/series.svg' %}"class="uil uil-serials">
+			  Сериалы
+			</a>
+			<span class="line"></span> 
+	
+			{% if user.is_authenticated %}
+			<a href="{% url 'watchlist' %}" class="sidebar-link">
+			  <img class="series_svg" src="{% static 'img/watchlist.svg' %}"class="uil uil-serials">
+			  Список фильмов/Сериалов к просмотру
+			</a>
+			{% else %}
+			<a href="{% url 'warning' %}" class="sidebar-link">
+			  <img class="series_svg" src="{% static 'img/watchlist.svg' %}"class="uil uil-serials">
+			  Список фильмов/Сериалов к просмотру
+			</a>
+			{% endif %}
+	
+			{% if user.is_authenticated %}
+			<a href="{% url 'AllSerials_page' %}" class="sidebar-link">
+			  <img class="series_svg" src="{% static 'img/history.svg' %}"class="uil uil-serials">
+			  История просмотра
+			</a>
+	
+			{% else %}
+			<a href="{% url 'warning' %}" class="sidebar-link">
+			  <img class="series_svg" src="{% static 'img/history.svg' %}"class="uil uil-serials">
+			  История просмотра
+			</a>
+			</a>
+			{% endif %}
+			<a href="{% url 'bout' %}" class="sidebar-link">
+			  <img class="series_svg" src="{% static 'img/heart.svg' %}"class="uil uil-serials">
+			  Обо мне
+			</a>
+			{% if user.is_authenticated %}
+	
+			<a href="{% url 'logout' %}" class="sidebar-link">
+			  <img class="series_svg" src="{% static 'img/exit.svg' %}"class="uil uil-serials">
+			  Выйти
+			</a>
+	
+			{% endif %}
+		  </nav>
+		</div>
+	  </div>
+
+  <header class="header" role="banner">
+    <a  class="main_link"href="{% url 'main_page' %}"> <div class="logo">CINEMANIA</div> <a>
+    <nav class="nav-links" role="navigation">
+      <a href="{% url 'main_page' %}">Главная</a>
+      <a href="{% url 'AllFilms_page' %}">Фильмы</a>
+      <a href="{% url 'AllSerials_page' %}">Сериалы</a>
+      {% if user.is_authenticated %}
+      <a href="{% url 'profile' %}" class="profile-link">
+        Профиль
+      </a>
+      {% endif %}
+    </nav>
+    <form method="get" action="{% url 'search' %}" class="search-box">
+      <div class="search-wrapper">
+        <input
+        type="text"
+        name="q"
+        placeholder="Поиск..."
+        class="search-input"
+        {% if query|cut:" " %}
+          value="{{ query }}"
+        {% endif %}
+        aria-label="Поле поиска"
+      />
+          <button type="submit" class="search-button">
+              <img src="{% static 'img/loupe.svg' %}" alt="Поиск" width="20" height="20" />
+          </button>
+          <div class="suggestions"></div>
+      </div>
+  </form>
+    <button class="menu-toggle" onclick="toggleSidebar()" aria-label="Меню">
+      <img src="{% static 'img/menu.svg' %}" class="menu-toggle" width="25" height="25"  >
+    </button>
+  </header>
+	<div class="section">
+		<div class="container">
+			<div class="row full-height justify-content-center">
+				<div class="col-12 text-center align-self-center py-5">
+					{% if messages %}
+					<div class="messages">
+						{% for message in messages %}
+						<div class="alert alert-{{ message.tags }}">
+							{{ message }}
+						</div>
+						{% endfor %}
+					</div>
+					{% endif %}
+					<div class="section pb-5 pt-5 pt-sm-2 text-center">
+						<input class="checkbox" type="checkbox" id="reg-log" name="reg-log" />
+						<label for="reg-log"></label>
+						<div class="card-3d-wrap mx-auto">
+							<div class="card-3d-wrapper">
+								<div class="card-front">
+									<div class="center-wrap">
+									  <div class="section text-center">
+										<h4 class="mb-4 pb-3">Log In</h4>
+										<form method="post" action="{% url 'login_page' %}">
+										  {% csrf_token %}
+										  <div class="form-group">
+											<input type="text" name="username" class="form-style"
+												   placeholder="Username" required>
+											<i class="input-icon uil uil-user"></i>
+										  </div>
+										  <div class="form-group mt-2">
+											<input type="password" name="password" class="form-style"
+												   placeholder="Password" required>
+											<i class="input-icon uil uil-lock-alt"></i>
+										  </div>
+										  <button type="submit" class="btn mt-4">Login</button>
+										  <p class="mb-0 mt-4 text-center">
+											<a href="#" class="link">Forgot your password?</a>
+										  </p>
+										</form>
+									  </div>
+									</div>
+								  </div>
+								<div class="card-back">
+									<div class="center-wrap">
+									  <div class="section text-center">
+										<h4 class="mb-3 pb-3">Sign Up</h4>
+										<form method="post" action="{% url 'register' %}">
+										  {% csrf_token %}
+										  <div class="form-group">
+											<input type="text" name="full_name" class="form-style"
+												   placeholder="Full Name" required>
+											<i class="input-icon uil uil-user"></i>
+										  </div>
+										  <div class="form-group mt-2">
+											<input type="text" name="username" class="form-style"
+												   placeholder="Username" required>
+											<i class="input-icon uil uil-user"></i>
+										  </div>
+										  <div class="form-group mt-2">
+											<input type="email" name="email" class="form-style"
+												   placeholder="Email" required>
+											<i class="input-icon uil uil-at"></i>
+										  </div>
+										  <div class="form-group mt-2">
+											<input type="password" name="password1" class="form-style"
+												   placeholder="Password" required>
+											<i class="input-icon uil uil-lock-alt"></i>
+										  </div>
+										  <div class="form-group mt-2">
+											<input type="password" name="password2" class="form-style"
+												   placeholder="Confirm Password" required>
+											<i class="input-icon uil uil-lock-alt"></i>
+										  </div>
+										  <button type="submit" class="btn mt-4">Register</button>
+										</form>
+									  </div>
+									</div>
+								  </div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<script src="{% static 'js/js.js' %}"></script>
+</body>
+</html>

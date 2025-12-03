@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+  {{ news.title }} - Новости кино
+{% endblock %}
+
+{% block content %}
+  <article class="news-detail-container">
+    <header class="news-detail-header">
+      <h1 class="news-detail-title">{{ news.title }}</h1>
+      <div class="news-detail-meta">
+        <div class="news-detail-date">
+          <i class="uil uil-calendar-alt"></i>
+          {{ news.published_date|date:'d.m.Y' }}
+        </div>
+        <div class="news-detail-author">
+          <i class="uil uil-user"></i>
+          {{ news.author|default:'Аноним' }}
+        </div>
+      </div>
+    </header>
+
+    {% if news.image_url %}
+      <img src="{{ news.image_url }}" alt="{{ news.title }}" class="news-detail-image" />
+    {% endif %}
+
+    <div class="news-detail-content">{{ news.content|linebreaks }}</div>
+
+    <nav class="news-navigation">
+      <a href="{% url 'main_page' %}" class="news-nav-link">
+        <i class="uil uil-arrow-left"></i> На главную
+      </a>
+      
+      {% if prev_news %}
+        <a href="{% url 'news_detail' prev_news.pk %}" class="news-nav-link">
+          <i class="uil uil-arrow-left"></i> Предыдущая новость
+        </a>
+      {% endif %}
+      
+      {% if next_news %}
+        <a href="{% url 'news_detail' next_news.pk %}" class="news-nav-link">
+          Следующая новость <i class="uil uil-arrow-right"></i>
+        </a>
+      {% else %}
+        <a href="{% url 'news_list' %}" class="news-nav-link">
+          Все новости <i class="uil uil-list-ul"></i>
+        </a>
+      {% endif %}
+    </nav>
+  </article>
+{% endblock %}

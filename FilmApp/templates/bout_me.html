@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<section class="about-container">
+    <!-- Шапка профиля -->
+    <div class="about-header">
+        <!-- Замени путь на своё фото -->
+        <img src="{% static 'img/bek.jpg' %}" alt="Фото владельца" class="about-avatar">
+        <h1 class="about-name">Тайтен Бекнур</h1>
+        <p class="about-tagline">Создатель и двигатель проекта <span class="logo-text">Cinemania</span></p>
+    </div>
+
+    <!-- Тело страницы -->
+    <div class="about-body">
+        <h2>Немного обо мне</h2>
+        <p>
+            Хэй! Я — IT-энтузиаст из Казахстана, который обожает кино, кодинг
+            и всё, что между этим. Днём сижу в колледже и работаю 
+            ночью — пилю этот сайт, чтобы делиться лучшими фильмами
+            со всеми 😎.
+        </p>
+
+        <h2>Чем занимаюсь</h2>
+        <ul class="about-list">
+            <li>💻 Новичек разработка (Python / Django / JS)</li>
+            <li>🎙️ Слушаю и смотрю подкасты про инвестиции и технологии</li>
+        </ul>
+
+        <h2>Соцсети &amp; контакты</h2>
+        <div class="about-links">
+            <a href="https://t.me/saranpak" target="_blank" class="social-link" aria-label="Telegram">
+                <i class="uil uil-telegram"></i>
+            </a>
+            <a href="https://github.com/Mpekvoup" target="_blank" class="social-link" aria-label="LinkedIn">
+                <i class="uil uil-github"></i>
+            </a>
+            <a href="mailto:beknurtaiten@gmail.com" class="social-link" aria-label="Email">
+                <i class="uil uil-envelope"></i>
+            </a>
+        </div>
+    </div>
+</section>
+{% endblock %}
